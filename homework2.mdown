@@ -1,0 +1,72 @@
+'''
+www: asdfasdf
+asdfasd: asdf
+'''
+### ヘッセ行列
+$$H(\Theta)=\begin{pmatrix}\\
+\frac{\partial^2 l}{\partial a^2} & \frac{\partial^2 l}{\partial a\partial b}&\frac{\partial^2 l}{\partial a\partial\sigma}\\
+\frac{\partial^2 l}{\partial b\partial a} & \frac{\partial^2 l}{\partial b^2}&\frac{\partial^2 l}{\partial b\partial\sigma}\\
+\frac{\partial^2 l}{\partial \sigma\partial a} & \frac{\partial^2 l}{\partial \sigma^2}&\frac{\partial^2 l}{\partial \sigma^2}
+\end{pmatrix}$$
+
+$$\begin{array}\\
+\frac{\partial l}{\partial a} &=\frac{1}{\sigma^2}{\sum\limits_{i=1}^n\left[(y_i-S)\cdot S\cdot(1-S)\cdot x_i\right]}\\\\
+&=\frac{1}{\sigma^2}{\sum\limits_{i=1}^n\left[y_iS-S^2(y_i+1)+S^3\right] }\cdot x_i\\
+\end{array}
+$$
+
+$$\left\{\begin{array}\\
+\frac{\partial^2 l}{\partial a^2}&=\frac{\partial }{\partial S}\cdot\left(\frac{\partial l}{\partial a}\right)\cdot  \frac{\partial S}{\partial a}\\\\
+&=\frac{1}{\sigma^2}\cdot{\sum\limits_{i=1}^n\left[y_i-2S(y_i+1)+3S^2\right] \cdot S\cdot(1-S)\cdot x_i^2}\\\\
+\frac{\partial^2 l}{\partial a\partial b}&=\frac{\partial }{\partial S}\cdot\left(\frac{\partial l}{\partial a}\right)\cdot  \frac{\partial S}{\partial b}\\\\
+&=\frac{1}{\sigma^2}\cdot{\sum\limits_{i=1}^n\left[y_i-2S(y_i+1)+3S^2\right] \cdot S\cdot(1-S)\cdot x_i }\\\\
+\frac{\partial^2 l}{\partial a\partial\sigma}&=-\frac{2}{\sigma^3}\cdot{\sum\limits_{i=1}^n\left[(y_i-S)\cdot S\cdot(1-S)\cdot x_i\right]}\\\\\\
+\end{array}\right.$$
+
+
+$$\begin{array}\\
+\frac{\partial l}{\partial b} &=\frac{1}{\sigma^2}{\sum\limits_{i=1}^n\left[(y_i-S)\cdot S\cdot(1-S)\right] }\\
+&=\frac{1}{\sigma^2}{\sum\limits_{i=1}^n\left[y_iS-S^2(y_i+1)+S^3\right] }\\
+\end{array}
+$$
+
+
+$$\left\{\begin{array}\\
+\frac{\partial^2 l}{\partial b\partial a}&=\frac{\partial }{\partial S}\cdot\left(\frac{\partial l}{\partial b}\right)\cdot  \frac{\partial S}{\partial a}\\\\
+&=\frac{1}{\sigma^2}\cdot{\sum\limits_{i=1}^n\left[y_i-2S(y_i+1)+3S^2\right] \cdot S\cdot(1-S)}\cdot x_i\\\\
+\frac{\partial^2 l}{\partial b^2}&=\frac{\partial }{\partial S}\cdot\left(\frac{\partial l}{\partial b}\right)\cdot  \frac{\partial S}{\partial b}\\\\
+&=\frac{1}{\sigma^2}\cdot{\sum\limits_{i=1}^n \left[y_i-2S(y_i+1)+3S^2\right] \cdot S\cdot(1-S)}\\\\
+\frac{\partial^2 l}{\partial b\partial\sigma}&=-\frac{2}{\sigma^3}\cdot\sum\limits_{i=1}^n\left[(y_i-S)\cdot S\cdot(1-S)\right]\\\\\\
+\end{array}\right.
+$$
+
+$$\begin{array}\\
+\frac{\partial l}{\partial \sigma}&= - \frac{n}{\sigma}+\sum\limits_{i=1}^n{\frac{(y_i-S)^2}{\sigma^3}}\\
+\end{array}$$
+
+$$\left\{\begin{array}\\
+\frac{\partial^2 l}{\partial \sigma\partial a}&= -\frac{2}{\sigma^3}\sum\limits_{i=1}^n{{(y_i-S)}\cdot S \cdot(1-S)\cdot x_i}\\
+\frac{\partial^2 l}{\partial \sigma\partial b}&= -\frac{2}{\sigma^3}\sum\limits_{i=1}^n{{(y_i-S)}\cdot S \cdot(1-S)}\\
+\frac{\partial^2 l}{\partial \sigma^2}&= \frac{n}{\sigma^2}-3\sum\limits_{i=1}^n{\frac{(y_i-S)^2}{\sigma^4}}\\
+\end{array}\right.$$
+
+### 勾配行列
+$$g(\Theta)=\begin{pmatrix}\\
+\frac{\partial l}{\partial a}\\
+\frac{\partial l}{\partial b}\\
+\frac{\partial l}{\partial \sigma}\\
+\end{pmatrix}$$
+
+### algorithim
+$$\Theta'=\Theta -\eta \cdot H(\Theta)^{-1} \cdot g(\Theta)\quad (\eta=1)$$
+計算の効率のために共通の式を取って、以下の様に表示
+$$\begin{array}\\
+\phi = y_i-2S(y_i+1)+3S^2\\
+\psi = S\cdot (1 - S)
+\end{array}$$
+
+$$\begin{pmatrix}\\
+\frac{1}{\sigma^2}\sum\limits_{i=1}^n \phi\cdot\psi\cdot x_i^2&\frac{1}{\sigma^2}\sum\limits_{i=1}^n \phi\cdot\psi\cdot x_i&-\frac{2}{\sigma^3}\sum\limits_{i=1}^n \varepsilon\cdot\psi\cdot x_i\\
+\frac{1}{\sigma^2}\sum\limits_{i=1}^n \phi\cdot\psi\cdot x_i&\frac{1}{\sigma^2}\sum\limits_{i=1}^n \phi\cdot\psi&-\frac{2}{\sigma^3}\sum\limits_{i=1}^n \varepsilon\cdot\psi\\
+-\frac{2}{\sigma^3}\sum\limits_{i=1}^n \varepsilon\cdot\psi\cdot x_i&-\frac{2}{\sigma^3}\sum\limits_{i=1}^n \varepsilon\cdot\psi&\frac{n}{\sigma^2}-3\sum\limits_{i=1}^n{\frac{\varepsilon^2}{\sigma^4}}\\
+\end{pmatrix}$$
